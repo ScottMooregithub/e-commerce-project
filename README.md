@@ -37,7 +37,7 @@
 - scottmooresrjc@gmail.com
 - https://github.com/ScottMooregithub
 
-##Walkthrough Video
+## Walkthrough Video
 - https://www.youtube.com/watch?v=AJTiUdifjrA
 
 
