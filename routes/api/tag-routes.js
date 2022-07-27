@@ -1,28 +1,17 @@
 const router = require("express").Router();
 const { Tag, Product, ProductTag } = require("../../models");
 
-// The `/api/tags` endpoint
-
 router.get("/", (req, res) => {
-  // find all tags
-  // be sure to include its associated Product data
   Tag.findAll({
     attributes: ["id", "tag_name"],
     include: {
       model: Product,
       as: "products",
     },
-  })
-    .then((dbUserData) => res.json(dbUserData))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  }).then((dbTagData) => res.json(dbTagData));
 });
 
 router.get("/:id", (req, res) => {
-  // find a single tag by its `id`
-  // be sure to include its associated Product data
   Tag.findOne({
     where: {
       id: req.params.id,
@@ -31,34 +20,22 @@ router.get("/:id", (req, res) => {
       model: Product,
       as: "products",
     },
-  })
-    .then((dbUserData) => {
-      if (!dbUserData) {
-        res.json({ message: "Data not found!" });
-        return;
-      }
-      res.json(dbUserData);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.json(err);
-    });
+  }).then((dbTagData) => {
+    if (!dbTagData) {
+      res.json({ message: "Data not found" });
+      return;
+    }
+    res.json(dbTagData);
+  });
 });
 
 router.post("/", (req, res) => {
-  // create a new tag
   Tag.create({
     tag_name: req.body.tag_name,
-  })
-    .then((dbUserData) => res.json(dbUserData))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  }).then((dbResData) => res.json(dbResData));
 });
 
 router.put("/:id", (req, res) => {
-  // update a tag's name by its `id` value
   Tag.update(
     {
       tag_name: req.body.tag_name,
@@ -68,32 +45,21 @@ router.put("/:id", (req, res) => {
         id: req.params.id,
       },
     }
-  )
-    .then((dbUserData) => res.json(dbUserData))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  ).then((dbUpdatedData) => res.json(dbUpdatedData));
 });
 
 router.delete("/:id", (req, res) => {
-  // delete on tag by its `id` value
   Tag.destroy({
     where: {
       id: req.params.id,
     },
-  })
-    .then((dbUserData) => {
-      if (!dbUserData) {
-        res.json({ message: "Data not found" });
-        return;
-      }
-      res.json({ message: "Delete succesful" });
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  }).then((dbResData) => {
+    if (!dbResData) {
+      res.json({ message: "Data not found" });
+      return;
+    }
+    res.json({ message: "Successfully deleted" });
+  });
 });
 
 module.exports = router;
